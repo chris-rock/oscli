@@ -7,7 +7,7 @@ I had some issues installing the python dependencies for OpenStack with pip on M
 ```bash
 docker pull chrisrock/openstack-cli
 # $(pwd)/config is the path where your openstackrc files are located
-docker run -it -v $(pwd)/config:/config chrisrock/openstack-cli /bin/bash
+docker run -it -v $(pwd)/config:/config chrisrock/openstack-cli --help
 # source the config file
 $ source /config/example.rc
 ```
@@ -19,10 +19,11 @@ $ source /config/example.rc
 docker build -t oscli .
 
 # Use the clients
-docker run -it oscli /bin/bash
+docker run -it --rm oscli --help
+docker run -it --rm oscli project list
 
 # If you like to mount your config files
-docker run -it -v $(pwd)/config:/config oscli /bin/bash
+docker run -it -v $(pwd)/config:/config oscli --help
 ```
 
 ## Contributing
