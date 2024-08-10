@@ -1,13 +1,22 @@
-FROM ubuntu:trusty
-MAINTAINER chris@lollyrock.com
+FROM ubuntu:20.04
 
-RUN apt-get update
-RUN apt-get install -y python-keystoneclient
-RUN apt-get install -y python-swiftclient
-RUN apt-get install -y python-novaclient
-RUN apt-get install -y python-troveclient
-RUN apt-get install -y python-glanceclient
-RUN apt-get install -y python-cinderclient
-RUN apt-get install -y python-heatclient
-RUN apt-get install -y python-ceilometerclient
-RUN apt-get install -y python-neutronclient
+RUN apt-get update \
+  && apt-get install --no-install-recommends -y \
+  gcc \
+  python3 \
+  python3-dev \
+  python3-pip \
+  libssl-dev \
+  jq && \
+  rm -rf /var/lib/apt/lists/*
+
+ENV pip_packages "\
+  python-openstackclient==6.6.0 \
+  otcextensions==0.31.7 "
+
+RUN pip3 install $pip_packages && \
+    useradd -m openstack
+USER openstack
+WORKDIR /home/openstack
+RUN mkdir -p ~/.config/openstack
+ENTRYPOINT ["openstack"]
